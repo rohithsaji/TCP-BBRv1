@@ -118,7 +118,7 @@
  {
    // 1500 byte packets
    uint32_t qSize = queue->GetNPackets ();
-   Time backlog = Seconds (static_cast<double> (qSize * 1000 * 8) /(54*(1e6))); // 10 Gb/s  54Mbps
+   Time backlog = Seconds (static_cast<double> (qSize * 1000 * 8) /(54*(1e6))); //  54Mbps
    // report size in units of packets and ms
    t1QueueLength << std::fixed << std::setprecision (2) << Simulator::Now ().GetSeconds () << " " << qSize << " " << backlog.GetMicroSeconds () << std::endl;
    // check queue size every 1/100 of a second
@@ -129,7 +129,7 @@
  CheckT2QueueSize (Ptr<QueueDisc> queue)
  {
    uint32_t qSize = queue->GetNPackets ();
-   Time backlog = Seconds (static_cast<double> (qSize * 1000 * 8) / 2*(1e6)); // 1 Gb/s 10Mbps
+   Time backlog = Seconds (static_cast<double> (qSize * 1000 * 8) / 2*(1e6)); // 2Mbps
    // report size in units of packets and ms
    t2QueueLength << std::fixed << std::setprecision (2) << Simulator::Now ().GetSeconds () << " " << qSize << " " << backlog.GetMicroSeconds () << std::endl;
    // check queue size every 1/100 of a second
