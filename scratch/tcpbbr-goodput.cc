@@ -45,28 +45,6 @@ TraceThroughput (Ptr<FlowMonitor> monitor)
   Simulator::Schedule (Seconds (0.2), &TraceThroughput, monitor);
 }
 
-// Check the queue size
-void CheckQueueSize (Ptr<QueueDisc> qd)
-{
-  uint32_t qsize = qd->GetCurrentSize ().GetValue ();
-  Simulator::Schedule (Seconds (0.2), &CheckQueueSize, qd);
-  std::ofstream q (dir + "/queueSize.dat", std::ios::out | std::ios::app);
-  q << Simulator::Now ().GetSeconds () << " " << qsize << std::endl;
-  q.close ();
-}
-
-// Trace congestion window
-static void CwndTracer (Ptr<OutputStreamWrapper> stream, uint32_t oldval, uint32_t newval)
-{
-  *stream->GetStream () << Simulator::Now ().GetSeconds () << " " << newval / 1448.0 << std::endl;
-}
-
-void TraceCwnd (uint32_t nodeId, uint32_t socketId)
-{
-  AsciiTraceHelper ascii;
-  Ptr<OutputStreamWrapper> stream = ascii.CreateFileStream (dir + "/cwnd.dat");
-  Config::ConnectWithoutContext ("/NodeList/" + std::to_string (nodeId) + "/$ns3::TcpL4Protocol/SocketList/" + std::to_string (socketId) + "/CongestionWindow", MakeBoundCallback (&CwndTracer, stream));
-}
 
 int main (int argc, char *argv [])
 {
@@ -186,7 +164,6 @@ int main (int argc, char *argv [])
   source.SetAttribute ("MaxBytes", UintegerValue (0));
   ApplicationContainer sourceApps = source.Install (sender.Get (0));
   sourceApps.Start (Seconds (0.0));
-  Simulator::Schedule (Seconds (0.2), &TraceCwnd, 0, 0);
   sourceApps.Stop (stopTime);
 
   // Install application on the receiver
@@ -205,9 +182,6 @@ int main (int argc, char *argv [])
 
   // Trace the queue occupancy on the second interface of R1
   tch.Uninstall (Wifinodes.Get (0)->GetDevice (1));
-  QueueDiscContainer qd;
-  qd = tch.Install (Wifinodes.Get (0)->GetDevice (1));
-  Simulator::ScheduleNow (&CheckQueueSize, qd.Get (0));
 
  
   FlowMonitorHelper flowmon;
