@@ -1,3 +1,8 @@
+/*
+The following code implements a dumble topology, for comparision of TCP BBRv1 and TCP Cubic
+we have takes some code from the following repo  https://github.com/Vivek-anand-jain/Implementation-of-TCP-Jersey-in-ns-3/ and made modifications to it to suit
+TCP BBRv1 and TCP cubic
+*/
 #include <iostream>
 
 #include "ns3/applications-module.h"
