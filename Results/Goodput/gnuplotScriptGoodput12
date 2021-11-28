@@ -1,0 +1,9 @@
+set terminal pngcairo enhanced color lw 1.5
+set output "goodput12.png"
+set xlabel "Post Reception Error Rate (percent)"
+set ylabel "Goodput (Mbps)"
+set xrange [0:0.13] 
+set yrange [0:10]
+set key right top vertical
+plot "goodput-reno-12.dat" using 1:2 title 'Reno' with lines lw 1.5 lc 'red',\
+"goodput-bbr-12.dat" using 1:2 title 'Bbr' with lines lw 1.5 lc 'blue'
